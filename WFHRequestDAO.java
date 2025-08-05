@@ -10,7 +10,7 @@ import utils.DatabaseConnection;
 public class WFHRequestDAO {
 
     public static boolean checkWFHRequestExists(int userId, java.sql.Date wfhDate) throws SQLException {
-        String query = "SELECT COUNT(*) FROM WFHRequests WHERE user_id = ? AND wfh_date = ?";
+        String query = "SELECT COUNT(*) FROM WFHRequests WHERE userID = ? AND wfhDate = ?";
         boolean exists = false;
 
         try (Connection connection = DatabaseConnection.getDataSource().getConnection();
@@ -28,7 +28,7 @@ public class WFHRequestDAO {
     }
 
     public static boolean addWFHRequest(int userId, java.sql.Date wfhDate, String wfhReason) throws SQLException {
-        String query = "INSERT INTO WFHRequests (user_id, wfh_date, wfh_reason) VALUES (?, ?, ?)";
+        String query = "INSERT INTO WFHRequests (userID, wfhDate, wfhReason) VALUES (?, ?, ?)";
         boolean inserted = false;
 
         try (Connection connection = DatabaseConnection.getDataSource().getConnection();

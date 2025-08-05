@@ -9,6 +9,8 @@ import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.Date;
 
+import java.util.List;
+
 @Path("/lunch")
 public class LunchScheduleResource {
 
@@ -77,9 +79,9 @@ public class LunchScheduleResource {
         }
 
         // Check if lunch schedule exists for the given date
-        boolean lunchScheduleExists = LunchScheduleDAO.checkLunchScheduleAvailability(new java.sql.Date(date.getTime()));
+        boolean lunchDateEmpty = LunchScheduleDAO.checkLunchScheduleAvailability(new java.sql.Date(date.getTime()));
 
-        if (!lunchScheduleExists) {
+        if (lunchDateEmpty) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("No lunch schedule exists for the given date!")
                     .build();
@@ -99,6 +101,32 @@ public class LunchScheduleResource {
         }
     }
 
+    @GET
+    @Path("/viewlunchcurrmonth")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response viewLunchScheduleForThisMonth() {
+        try {
+            // Fetch the lunch schedule for this month
+            List<LunchSchedule> lunchSchedules = LunchScheduleDAO.viewLunchScheduleForThisMonth();
 
+            // If no schedules are found, return a 404 response
+            if (lunchSchedules.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("No lunch schedules found for this month.")
+                        .build();
+            }
+
+            // Return the list of lunch schedules
+            return Response.status(Response.Status.OK)
+                    .entity(lunchSchedules)
+                    .build();
+
+        } catch (SQLException e) {
+            // Handle any SQL exceptions
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error fetching lunch schedules for this month.")
+                    .build();
+        }
+    }
 
 }

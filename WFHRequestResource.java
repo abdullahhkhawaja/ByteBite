@@ -21,7 +21,7 @@ public class WFHRequestResource {
         int userId = wfhRequest.getUserID();
         Date wfhDate = wfhRequest.getWfhDate();
         String wfhReason = wfhRequest.getWfhReason();
-        
+
         if (userId <= 0 || wfhDate == null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("User ID, WFH date cannot be empty!")
